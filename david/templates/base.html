@@ -1,0 +1,30 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32.png' %}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'favicon-64.png' %}">
+    <link rel="icon" type="image/png" sizes="128x128" href="{% static 'favicon-128.png' %}">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="{% static 'favicon-32.png' %}">
+    <link rel="apple-touch-icon" type="image/png" sizes="64x64" href="{% static 'favicon-64.png' %}">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="{% static 'favicon-128.png' %}">
+
+    <link href="{% static 'css/fonts.css' %}" rel="stylesheet">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/header.css' %}" rel="stylesheet">
+    {% block styles %}{% endblock %}
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

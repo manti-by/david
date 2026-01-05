@@ -1,0 +1,73 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  checks:
+
+    name: Run Django checks
+
+    runs-on: ubuntu-latest
+
+    services:
+
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: david
+          POSTGRES_PASSWORD: david
+          POSTGRES_DB: david
+        ports:
+          - 5432:5432
+
+      rabbitmq:
+        image: rabbitmq:4
+        env:
+          RABBITMQ_DEFAULT_USER: david
+          RABBITMQ_DEFAULT_PASS: david
+          RABBITMQ_DEFAULT_VHOST: david
+        ports:
+          - 5672:5672
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          uv sync --locked --all-extras --dev
+
+      - name: Run pre-commit hooks
+        run: |
+          uv run pre-commit run --all-files
+
+      - name: Check for missing migrations
+        run: |
+          uv run python manage.py makemigrations --dry-run --check --verbosity=3 --settings=david.settings.sqlite
+
+      - name: Run Django system checks
+        run: |
+          uv run python manage.py check --fail-level WARNING --settings=david.settings.sqlite
+
+      - name: Run Pytest suite
+        run: |
+          uv run pytest --create-db --disable-warnings --ds=david.settings.test david/

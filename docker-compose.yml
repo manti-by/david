@@ -1,0 +1,64 @@
+services:
+
+  postgres:
+    image: postgres:18
+    container_name: david-postgres
+    environment:
+      - POSTGRES_DB=david
+      - POSTGRES_USER=david
+      - POSTGRES_PASSWORD=david
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: david-rabbitmq
+    ports:
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=david
+      - RABBITMQ_DEFAULT_PASS=david
+      - RABBITMQ_DEFAULT_VHOST=david
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  redis:
+    image: redis:7
+    container_name: david-redis
+
+  django: &base_container
+    image: david:latest
+    container_name: david-django
+    ports:
+      - "8000:8000"
+    links:
+      - postgres
+      - rabbitmq
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=david.settings.dev
+      - POSTGRES_HOST=postgres
+      - RABBITMQ_HOST=rabbitmq
+      - REDIS_HOST=redis
+    volumes:
+      - .:/srv/app/src/
+    command: |
+      uv run gunicorn david.asgi:application --bind 0.0.0.0:8000 --workers 2 --worker-class uvicorn.workers.UvicornWorker
+
+  worker:
+    <<: *base_container
+    container_name: david-worker
+    ports: []
+    command: |
+      uv run celery -A david.apps.core.celery worker -l INFO
+
+  scheduler:
+    <<: *base_container
+    container_name: david-scheduler
+    ports: []
+    command: |
+      uv run celery -A david.apps.core.celery beat -l INFO
+
+volumes:
+  postgres_data:
+  rabbitmq_data:

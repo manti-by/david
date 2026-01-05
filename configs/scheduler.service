@@ -1,0 +1,18 @@
+[Unit]
+Description=Periodic task scheduler
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+Restart=always
+WorkingDirectory=/home/ubuntu/david
+EnvironmentFile=/home/ubuntu/david/.env
+ExecStart=/home/ubuntu/david/.venv/bin/celery -a david.apps.core.celery beat -l WARNING
+StandardOutput=file:/var/log/david/scheduler-access.log
+StandardError=file:/var/log/david/scheduler-error.log
+KillSignal=SIGINT
+TimeoutStopSec=600
+
+[Install]
+WantedBy=multi-user.target

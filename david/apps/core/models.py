@@ -23,6 +23,9 @@ class Log(models.Model):
     levelname = models.CharField(max_length=100, help_text="Log level")
     asctime = models.DateTimeField(help_text="Log timestamp")
 
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
+
     class Meta:
         verbose_name = _("log")
         verbose_name_plural = _("logs")

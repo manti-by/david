@@ -1,4 +1,4 @@
-FROM python:3.14-slim
+FROM python:3.13-slim
 
 LABEL maintainer="Alex Chaika <manti.by@gmail.com>"
 
@@ -14,4 +14,4 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-editable
 
 WORKDIR /srv/app/src/
-CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["uv", "run", "manage.py", "runserver", "0.0.0.0:8000"]

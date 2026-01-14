@@ -21,4 +21,5 @@ media/
 docker-compose.yml
 Dockerfile
 LICENSE
+AGENTS.md
 README.md

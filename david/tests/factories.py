@@ -1,3 +1,4 @@
+import factory
 import factory.fuzzy
 from factory import DictFactory
 from factory.django import DjangoModelFactory

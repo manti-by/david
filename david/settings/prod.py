@@ -45,20 +45,12 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.getenv("POSTGRES_NAME", "david"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASS"),
+        "USER": os.getenv("POSTGRES_USER", "david"),
+        "PASSWORD": os.getenv("POSTGRES_PASS", "david"),
         "HOST": os.getenv("POSTGRES_HOST", "localhost"),
         "PORT": os.getenv("POSTGRES_PORT", 5432),
     }
 }
-
-# RabbitMQ overrides
-
-rabbitmq_host = os.getenv("RABBITMQ_HOST", "localhost")
-rabbitmq_user = os.getenv("RABBITMQ_USER")
-rabbitmq_pass = os.getenv("RABBITMQ_PASS")
-
-CELERY_BROKER_URL = f"amqp://{rabbitmq_user}:{rabbitmq_pass}@{rabbitmq_host}:5672/david"
 
 # Production logging
 

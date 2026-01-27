@@ -42,7 +42,8 @@ pip:
 	uv sync --all-extras --dev
 
 update:
-	uv sync --all-extras --dev --upgrade
+	uv run uv-bump
+	uv sync --all-extras --dev
 	uv run pre-commit autoupdate
 
 ci: pip check django-checks test docker-build

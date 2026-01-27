@@ -2,6 +2,10 @@ from .base import *  # noqa
 
 DEBUG = False
 
+# Use in-memory Redis for testing
+CELERY_BROKER_URL = "memory://"
+CELERY_TASK_ALWAYS_EAGER = True
+
 ALLOWED_HOSTS = ("*",)
 
 MEDIA_ROOT = "/tmp/"

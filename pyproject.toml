@@ -5,7 +5,7 @@ description = "Django template"
 readme = "README.md"
 requires-python = ">=3.13.6,<3.14.0"
 dependencies = [
-    "celery[librabbitmq]==5.6.0",
+    "celery[redis]==5.6.0",
     "django==5.2.7",
     "django-celery-beat==2.8.1",
     "django-celery-results==2.6.0",
@@ -15,21 +15,22 @@ dependencies = [
     "drf-spectacular==0.27.0",
     "gunicorn==23.0.0",
     "ipython>=9.6.0",
+    "pre-commit>=4.5.1",
     "psycopg2-binary==2.9.11",
     "pytz==2025.2",
-    "redis==7.1.0",
     "requests==2.32.5",
-    "ruff>=0.14.8",
     "uvicorn[standard]==0.38.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "factory-boy>=3.3.3",
-    "pre-commit>=4.3.0",
-    "pytest>=8.4.2",
+    "debugpy>=1.8.19",
+    "pytest>=9.0.2",
     "pytest-django>=4.11.1",
     "pytest-factoryboy>=2.8.1",
+    "ruff>=0.14.8",
+    "ty>=0.0.12",
+    "uv-bump>=0.4.1",
 ]
 
 [tool.setuptools]
@@ -39,12 +40,13 @@ py-modules = []
 log_cli = true
 log_cli_format = "%(levelname)s %(asctime)s %(message)s"
 django_find_project = true
-addopts = '-p no:warnings --color=yes --ds=david.settings.test'
+addopts = '--create-db --disable-warnings --color=yes --ds=david.settings.test'
 norecursedirs = '''
 .git
 .github
 .pytest_cache
 .ruff_cache
+.venv
 '''
 
 [tool.bandit]
@@ -54,21 +56,6 @@ exclude_dirs = [
 ]
 skips = ["B101", "B308", "B703"]
 
-[tool.black]
-line-length = 120
-target_version = ['py314']
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-  | \.idea
-  | \.vscode
-  | \.pytest_cache
-  | \.ruff_cache
-  | \.venv
-)/
-'''
-
 [tool.curlylint.rules]
 indent = 2
 html_has_lang = true
@@ -76,7 +63,7 @@ html_has_lang = true
 [tool.ruff]
 line-length = 120
 indent-width = 4
-target-version = "py314"
+target-version = "py313"
 exclude = [
     "david/settings/"
 ]
@@ -151,3 +138,15 @@ lines-after-imports = 2
 "**/*test*.py" = ["E402", "F403", "F405", "S", "N802"]
 "**/{settings}/*" = ["E402", "F403", "F405"]
 "**/migrations/*" = ["RUF", "I"]
+
+[tool.ty.src]
+exclude = [
+    ".git",
+    ".idea",
+    ".vscode",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "david/settings/",
+    "david/tests/"
+]

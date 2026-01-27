@@ -23,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "insecure-key")  # nosec
+SECRET_KEY: str | None = os.getenv("SECRET_KEY", "insecure-key")  # nosec
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG: bool = True
 
-ALLOWED_HOSTS = ("david.local", "192.168.1.100")
+ALLOWED_HOSTS = ("localhost", "127.0.0.1")
 
 # CSRF Protection
 csrf_trusted_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
@@ -127,15 +127,7 @@ CACHES = {
 # Background tasks
 # https://docs.celeryq.dev/en/v5.5.3/django/first-steps-with-django.html
 
-RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
-
-RABBITMQ_USER = os.getenv("RABBITMQ_USER", "david")
-
-RABBITMQ_PASS = os.getenv("RABBITMQ_PASS", "david")
-
-RABBITMQ_VHOST = os.getenv("RABBITMQ_VHOST", "david")
-
-CELERY_BROKER_URL = f"amqp://{RABBITMQ_USER}:{RABBITMQ_PASS}@{RABBITMQ_HOST}:5672/{RABBITMQ_VHOST}"
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379/1"
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 

@@ -13,6 +13,38 @@ It uses Django 5.2.7 with Django REST Framework, PostgreSQL, Redis, and modern P
 - Static files like images, CSS and JS in `./david/static/`
 - Django templates in `./david/templates/`
 
+## Git Workflow
+
+This project adheres strictly to the Git Flow branching model. AI agents must follow these guidelines:
+
+### Main Branch:
+
+- The `master` branch always contains production-ready, stable code.
+- Never commit directly to `master`.
+- Do not use `git push --force` on the `master` branch.
+- Do not merge branches into `master` without explicit approval.
+
+### Feature Branches:
+
+- Create feature branches using the naming convention `<agent-name>/feature/<issue-id>-<descriptive-name>` (e.g., `opencode/feature/ODIN-10-add-user-authentication`).
+- Use the [Conventional Commits](https://www.conventionalcommits.org) specification for commit messages (e.g., `feat:`, `fix:`, `docs:`).
+- Ensure all local tests pass before committing.
+- Use `git push --force-with-lease` if needed on your feature branch, but never on `master`.
+
+### Pull Requests (PRs):
+
+- Open a Pull Request for every completed feature branch.
+- PRs must be reviewed and pass all CI checks before merging.
+- The PR title should follow the Conventional Commits specification.
+
+## Linear Workflow
+
+- When starting implementation of any issue from `TODO`, move it to `In Progress` column.
+- When feature is completed and PR is created, move it to `In Review` column.
+- After approval, merge the feature branch into `master` and move the issue to `Done` column.
+- If the feature branch is not merged into `master`, move it back to `In Progress` column.
+- If the feature branch is closed without merging, move it to `Closed` column.
+
 ## Development Commands
 
 ### Package Management
